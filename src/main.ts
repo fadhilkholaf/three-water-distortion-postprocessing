@@ -42,7 +42,7 @@ const postM = new THREE.ShaderMaterial({
     u_ratio: { value: window.innerWidth / window.innerHeight },
     u_img_ratio: { value: window.innerWidth / window.innerHeight },
     u_blueish: { value: 1 },
-    u_scale: { value: 4 },
+    u_scale: { value: 8 },
     u_illumination: { value: 0.3 },
     u_surface_distortion: { value: 0.07 },
     u_water_distortion: { value: 0 },
@@ -59,7 +59,7 @@ const videoDOM = document.createElement("video");
 
 navigator.mediaDevices
   .getUserMedia({
-    video: true,
+    video: { frameRate: 30 },
   })
   .then((mediaStream) => {
     videoDOM.srcObject = mediaStream;
@@ -75,9 +75,13 @@ navigator.mediaDevices
 
 const videoT = new THREE.VideoTexture(videoDOM);
 
-const cubeG = new THREE.PlaneGeometry(4, 4);
-const cubeM = new THREE.MeshBasicMaterial({ map: videoT });
+const cubeG = new THREE.PlaneGeometry(2, 2);
+const cubeM = new THREE.MeshBasicMaterial({
+  map: videoT,
+  side: THREE.DoubleSide,
+});
 const cube = new THREE.Mesh(cubeG, cubeM);
+cube.rotation.y = Math.PI;
 
 scene.add(cube);
 
